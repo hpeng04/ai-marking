@@ -3,6 +3,8 @@ import os
 import base64
 import requests
 
+### WIP ###
+
 def process(image_path):
     # OpenAI GPT API Key
     with open("./secrets/gpt_api_key", "r") as key_file:
