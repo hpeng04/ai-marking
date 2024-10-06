@@ -4,11 +4,12 @@ import cv2
 import numpy as np
 import re
 import pandas as pd
+import os
 
 def crop_name(img_path):
     with Image.open(img_path) as img:
         width, height = img.size
-        name_crop = img.crop((3/5*width, 0, width*0.90, height*0.1))
+        name_crop = img.crop((3/5*width, 0, width*0.95, height*0.1))
         name_crop.save(f".{img_path.strip('.png')}_namecrop.png")
     return name_crop
 
@@ -54,7 +55,7 @@ def perform_ocr(img):
     extracted_text = pytesseract.image_to_string(processed_img, config="--psm 7", lang='eng')
     
     # Print the extracted text
-    processed_img.show()
+    # processed_img.show()
     print("Extracted Text: ")
     print(extracted_text)
     return extracted_text
@@ -66,6 +67,8 @@ def crop_lab(img_path):
     return cropped_img
 
 def rng(df):
+    # Set the seed for reproducibility
+    np.random.seed(0)
     # Generate a random 9 digit number
     id = np.random.randint(100000000, 999999999)
     # Check if the ID is already in the df
@@ -89,7 +92,8 @@ def extract_name(img_path, df):
     new_row = pd.DataFrame([{'Name': name, 'ID': numbers, 'random_ID': random_id}])
     # Concatenate the new row with the existing DataFrame
     df = pd.concat([df, new_row], ignore_index=True)
-    return df
+    # os.remove(cropped_img) ### REMOVE NAMECROP ###
+    return df, random_id
 
 def save_to_excel(df):
     # Save the df to an Excel file
@@ -99,5 +103,5 @@ def save_to_excel(df):
 if __name__ == "__main__":
     img_path = "./temp/12_1.png"
     df = pd.DataFrame(columns=['Name', 'ID', 'random_ID'])
-    df = extract_name(img_path, df)
+    df, random_id = extract_name(img_path, df)
     save_to_excel(df)

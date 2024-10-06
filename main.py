@@ -5,11 +5,13 @@ import os
 import cv2
 import gpt
 from PIL import Image
-from util import crop_image
+from util import crop_lab, extract_name, save_to_excel
+import pandas as pd
 
-if __name__ == "__main__":
+def main():
     # Authenticate and initialize PyDrive
     gauth = GoogleAuth()
+    gauth.LoadClientConfigFile('secrets/client_secrets.json')
     gauth.LocalWebserverAuth()  # Creates local webserver and auto handles authentication
     drive = GoogleDrive(gauth)
 
@@ -20,34 +22,43 @@ if __name__ == "__main__":
     # Fetch the list of all files in the folder
     file_list = drive.ListFile({'q': query}).GetList()
 
+    # Create a DataFrame to store the extracted student ID and names
+    df = pd.DataFrame(columns=['Name', 'ID', 'random_ID'])
+
     # Download and read each image
     for file in file_list:
         if file['mimeType'].startswith('application/pdf'):  # Check if the file is an pdf
-            file_name = file['title']
-            print(f'Downloading {file_name}...')
-            file.GetContentFile(file_name)  # Download the file
+            pdf = file['title']
+            print(f'Downloading {pdf}...')
+            download_dir = "./temp/"  # Specify the directory to download the file
+            file.GetContentFile(os.path.join(download_dir, pdf))  # Download the file to the specified directory
 
             # Convert PDF to images
-            images = convert_from_path(file_name)
+            images = convert_from_path(f"./temp/{pdf}")
 
             # Save each page as an image
             image_list = []
             for i, image in enumerate(images):
-                image_path = f'{"./temp/"+file_name.strip(".pdf")}_{i + 1}.png'
+                image_path = f'{"./temp/"+pdf.strip(".pdf")}_{i + 1}.png'
                 image.save(image_path, 'PNG')
                 print(f'Saved {image_path}')
                 image_list.append(image_path)
                 break
 
             # Remove the pdf after processing
-            os.remove(file_name)
+            os.remove(f"./temp/{pdf}")
+
+            df, random_id = extract_name(image_list[0], df)
+            save_to_excel(df)
 
             # Read every page in pdf
+            page = 1
             for image_path in image_list:
                 # response = gpt.process(image_path)
                 # print(response)
-                image = crop_image(image_path)
-                image.save(f".{image_path.strip('.png')}_cropped.png")
+                image = crop_lab(image_path)
+                image.save(f"./temp/{random_id}_{page}.png")
+                page += 1
                 # image.show()
                 # image = cv2.imread(image_path)
                 # cv2.imshow('Image', image)
@@ -55,5 +66,5 @@ if __name__ == "__main__":
                 # cv2.destroyAllWindows()
                 # os.remove(image_path)
 
-
-
+if __name__ == "__main__":
+    main()
