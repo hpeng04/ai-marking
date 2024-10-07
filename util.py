@@ -6,11 +6,11 @@ import re
 import pandas as pd
 import os
 
-def crop_name(img_path):
+def crop_name(img_path, random_id):
     with Image.open(img_path) as img:
         width, height = img.size
         name_crop = img.crop((3/5*width, 0, width*0.95, height*0.1))
-        name_crop.save(f".{img_path.strip('.png')}_namecrop.png")
+        name_crop.save(f"./temp/{random_id}_name.png")
     return name_crop
 
 # Preprocess the image by straightening, sharpening, denoising, and binarization
@@ -72,12 +72,13 @@ def rng(df):
     # Generate a random 9 digit number
     id = np.random.randint(100000000, 999999999)
     # Check if the ID is already in the df
-    while id in df['ID'].values:
+    while id in df['random_ID'].values:
         id = np.random.randint(100000000, 999999999)
     return id
 
 def extract_name(img_path, df):
-    cropped_img = crop_name(img_path)
+    random_id = rng(df)
+    cropped_img = crop_name(img_path, random_id)
     extracted_text = perform_ocr(cropped_img)
     # Find all sequences of letters in the text
     name = re.findall(r'[a-zA-Z]+', extracted_text)
@@ -87,12 +88,10 @@ def extract_name(img_path, df):
     numbers = re.findall(r'\d+', extracted_text)
     # Join the sequences into a single string
     numbers = ''.join(numbers)
-    random_id = rng(df)
     # Create a new DataFrame with the row to be added
     new_row = pd.DataFrame([{'Name': name, 'ID': numbers, 'random_ID': random_id}])
     # Concatenate the new row with the existing DataFrame
     df = pd.concat([df, new_row], ignore_index=True)
-    # os.remove(cropped_img) ### REMOVE NAMECROP ###
     return df, random_id
 
 def save_to_excel(df):
