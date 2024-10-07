@@ -9,7 +9,7 @@ import os
 def crop_name(img_path, random_id):
     with Image.open(img_path) as img:
         width, height = img.size
-        name_crop = img.crop((3/5*width, 0, width*0.95, height*0.1))
+        name_crop = img.crop((3/5*width, 0, width*0.93, height*0.1))
         name_crop.save(f"./temp/{random_id}_name.png")
     return name_crop
 
