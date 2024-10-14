@@ -1,0 +1,117 @@
+Q1A Marking Scheme
+General note for all questions:
+Step 1: if the student solution for step 1 is incorrect points should be deducted according to the given grading
+Step 2: after deducting points for step 1, the student solution for step 2 should be resolved based on the incorrect answer in step 1. If the recalculated answer in step 2 is correct ( despite the mistake in step 1 ), the student should be awarded full mark for step 2
+
+●	This approach ensures that students are not penalized twice or more for a mistake in step 1. If they correctly follow through to step 2 based on their own work
+
+Q1) 
+Role : Assign up to 5 marks for the student's solution, deducting points where   it deviates from the model answer
+
+Marking scheme: 
+Allow a five percent (5%)discrepancy between the student solution and the model answer discrepancy 
+
+A)
+●	Deduct 1 point if angle 𝛂 in the student's solution differs from angle 𝛂 in the model answer. OR If angle 𝛂 is not presented  in the solution.
+●	Deduct 1 point if angle 𝛃 in the student's solution differs from angle 𝛃 in the model answer. OR If angle 𝛃 is not presented  in the solution.
+●	Deduct 1 point if force T1 in the student's solution differs from force T1 in the model answer. OR If force T1 is not presented  in the solution.
+
+B) 
+●	Deduct 2 points if the resultant force R in the student's solution differs from force R in the model answer. OR If force R is not presented  in the solution.
+
+
+
+Output: 
+Provide the final score out of 5 marks for the student's solution to question 1.
+
+Out put format Example:
+Evaluation for Student's Solution:
+Step A:
+1.Angle α:
+Student's α = 85°
+Model answer α = 85°
+Evaluation: Correct.
+Deducted Points: None.
+Final Mark Calculation:
+•Step A: 3/3 (No deductions)
+Q1 Score: ? out of 5 marks
+
+
+Q2A Marking Scheme
+General note for all questions:
+Step 1: if the student solution for step 1 is incorrect points should be deducted according to the given grading
+Step 2: after deducting points for step 1, the student solution for step 2 should be resolved based on the incorrect answer in step 1. If the recalculated answer in step 2 is correct ( despite the mistake in step 1 ), the student should be awarded full mark for step 2
+
+●	This approach ensures that students are not penalized twice or more for a mistake in step 1. If they correctly follow through to step 2 based on their own work
+
+
+
+Q2) 
+Role : Assign up to 8 marks for the student's solution, deducting points where   it deviates from the model answer
+Marking scheme: 
+Allow a five percent (5%) discrepancy between the student solution and the model answer discrepancy 
+A)
+•	Deduct 1 point if the resultant force R1 in the student's solution differs from force R1 in the model answer. OR If force R1 is not presented  in the solution.
+•	Deduct 1 point if the direction angle 𝛂 in the student's solution differs from the direction angle 𝛂 in the model answer. OR If the direction angle 𝛂 is not presented  in the solution.
+B) 
+•	Deduct 1 point if the resultant force R in the student's solution differs from force R in the model answer. OR If force R is not presented  in the solution.
+•	Deduct 1 point if R direction angle 𝛃 in the student's solution differs from R direction angle 𝛃 in the model answer. OR If R direction angle 𝛃 is not presented  in the solution.
+C) 
+•	Deduct 0.5 point if Vector A in the student's solution differs from Vector A in the model answer. OR If Vector A is not presented  in the solution.
+•	Deduct 0.5 point if Vector B in the student's solution differs from Vector B in the model answer. OR If Vector B is not presented  in the solution.
+•	Deduct 0.5 point if Vector C in the student's solution differs from Vector C in the model answer. OR If Vector C is not presented  in the solution.
+•	Deduct 1 point if the resultant force FR in the student's solution differs from the resultant force FR in the model answer. OR If the resultant force FR is not presented  in the solution.
+•	Deduct 1 point if FR direction angle 𝚹 in the student's solution differs from FR direction angle 𝚹 in the model answer. OR If FR direction angle 𝚹 is not presented  in the solution.
+
+Output: 
+Provide the final score out of 8 marks for the student's solution to question 2.
+
+Out put format Example:
+Evaluation for Student's Solution:
+Step A:
+1.Angle α:
+Student's α = 85°
+Model answer α = 85°
+Evaluation: Correct.
+Deducted Points: None.
+Final Mark Calculation:
+•Step A: 3/3 (No deductions)
+Q2 Score: ? out of 5 marks
+
+Q3A Marking Scheme
+General note for all questions:
+Step 1: if the student solution for step 1 is incorrect points should be deducted according to the given grading
+Step 2: after deducting points for step 1, the student solution for step 2 should be resolved based on the incorrect answer in step 1. If the recalculated answer in step 2 is correct ( despite the mistake in step 1 ), the student should be awarded full mark for step 2
+
+●	This approach ensures that students are not penalized twice or more for a mistake in step 1. If they correctly follow through to step 2 based on their own work
+
+Q3) 
+Role : Assign up to 7 marks for the student's solution, deducting points where   it deviates from the model answer
+Marking scheme: 
+Allow a five percent (5%) discrepancy between the student solution and the model answer discrepancy 
+A)
+•	Deduct 1 point if Vector P in the student's solution differs from Vector P in the model answer. OR If Vector P is not presented  in the solution.
+•	Deduct 1 point if Vector Q in the student's solution differs from Vector Q in the model answer. OR If Vector Q is not presented  in the solution.
+•	Deduct 1 point if Vector S in the student's solution differs from Vector S in the model answer. OR If Vector S is not presented  in the solution.
+B)
+•	Deduct 2 points if Vector R in the student's solution differs from Vector R in the model answer. OR If Vector R is not presented  in the solution.
+C)
+•	Deduct 1 point if the magnitude of the resultant force R in the student's solution differs from the magnitude of the resultant force R in the model answer. OR If force R is not presented  in the solution.
+•	Deduct 1 point if R direction angle 𝚹 in the student's solution differs from the direction angle 𝚹 in the model answer. OR If the direction angle 𝚹 is not presented  in the solution.
+
+Output: 
+Provide the final score out of 7 marks for the student's solution to question 2.
+
+Out put format Example:
+Evaluation for Student's Solution:
+Step A:
+1.Angle α:
+Student's α = 85°
+Model answer α = 85°
+Evaluation: Correct.
+Deducted Points: None.
+Final Mark Calculation:
+•Step A: 3/3 (No deductions)
+Q3 Score: ? out of 5 marks
+
+Final Score: ? out of 15 marks

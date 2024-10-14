@@ -1,11 +1,11 @@
 import os
 import pandas as pd
-from PIL import Image
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-from pdf2image import convert_from_path
 import gpt
-from util import crop_lab, extract_name, save_to_excel
+import gemini # TBD
+import process
+import io_utils
 
 def authenticate():
     # Authenticate and initialize PyDrive
@@ -15,63 +15,73 @@ def authenticate():
     drive = GoogleDrive(gauth)
     return drive
 
-def list_files(drive, folder_id):
-    # List all files in a specified directory (folder)
-    query = f"'{folder_id}' in parents and trashed=false"
-    # Fetch the list of all files in the folder
-    file_list = drive.ListFile({'q': query}).GetList()
-    return file_list
-
-def download_pdf(file, download_dir):
-    pdf = file['title']
-    print(f'Downloading {pdf}...')
-    file.GetContentFile(os.path.join(download_dir, pdf))  # Download the file to the specified directory
-
-def convert_pdf_to_images(download_dir, pdf):
-    # Convert PDF to images
-    images = convert_from_path(f"{download_dir+pdf}")
-    # Save each page as an image
-    image_list = []
-    for i, image in enumerate(images):
-        image_path = f'{download_dir+pdf.strip(".pdf")}_{i + 1}.png'
-        image.save(image_path, 'PNG')
-        print(f'Saved {image_path}')
-        image_list.append(image_path)
-    return image_list
-
-def process_images(image_list, df, random_id):
-    for page, image_path in enumerate(image_list):
-        image = crop_lab(image_path)
-        cropped_img_path = f"./temp/{random_id}_{page+1}.png"
-        os.remove(image_path)
-        image.save(cropped_img_path)
-        response = gpt.digitize(cropped_img_path)
-        # Write response to a text file
-        with open(f"./digitized/{random_id}_{page}.txt", "w") as text_file:
-            text_file.write(str(response['choices'][0]['message']['content']))
-        page += 1
-
 def main():
     # Authenticate and initialize PyDrive
-    drive = authenticate()
+    while True:
+        # Prompt the user to choose the option for running the program
+        # 1 - Process PDFs
+        # 2 - Process Digitized Texts Only
+        option = input("Select an option:\n1 - Process PDFs\n2 - Process Digitized Texts Only\n")
+        if option == '1': # Process PDFs and digitized texts
 
-    # List all files in a specified directory (folder)
-    folder_id = '1UCMqoqjN_ZlqVDRHJkzkb8hzi8m-ehJm'  # Student Work folder in engg130aimarking@gmail.com
-    file_list = list_files(drive, folder_id)
+            drive = authenticate()
 
-    # Create a DataFrame to store the extracted student ID and names
-    df = pd.DataFrame(columns=['Name', 'ID', 'random_ID', 'Grade'])
+            solutions_folder_id = r'1h5pJGGLeARTLeRaMMslnDll8pwF16XR8'
+            students_work_folder_id = r'1UCMqoqjN_ZlqVDRHJkzkb8hzi8m-ehJm'
 
-    # Download and process each PDF
-    for file in file_list:
-        if file['mimeType'].startswith('application/pdf'):  # Check if the file is a PDF
-            download_dir = "./pdfs/"  # Specify the directory to download the file
-            download_pdf(file, download_dir)
-            image_list = convert_pdf_to_images(download_dir, file['title'])
-            df, random_id = extract_name(image_list[0], df)
-            os.rename(f"{download_dir+file['title']}", f"{download_dir+str(random_id)}.pdf")
-            process_images(image_list, df, random_id)
-            save_to_excel(df)
+            # Processes the solutions by digitizing the solution PDF using LLMs
+            # and saving it to a text file with the path solution_path
+            solution_path = process.process_solutions(drive, solutions_folder_id)
+
+            # Processes all student labs by digitizing the student work PDFs using LLMs
+            # and stores the student information along with their random id in a dataframe
+            # and excel file in data/student_data.xlsx
+            df = process.process_student_work(drive, students_work_folder_id)
+            for file in os.listdir("digitized/"):
+                if file.endswith('.txt'):
+
+                    # Call LLM for marking and providing feedback
+                    feedback = gpt.mark_lab(solution_path, f'digitized/{file}')
+
+                    # Create feedback file for random id associated to student
+                    with open(f"feedback/{file}", "w") as text_file:
+                        text_file.write(str(feedback))
+
+                    # Retrieve the mark from the feedback and save to dataframe and excel
+                    mark = process.retrieve_mark(feedback)
+                    io_utils.save_mark(mark, df, file.strip('.txt'))
+            break
+
+        elif option == '2': # Only process the digitized texts
+            # For every student work in digitized/ folder, mark the lab
+
+            # Path to solution file
+            solution_path = r'solutions/Lab 1 Solutions A.pdf.txt' # To be changed to dynamic path
+
+            df = io_utils.read_excel_to_dataframe('data/student_data.xlsx')
+            for file in os.listdir("digitized/"):
+                if file.endswith('.txt'):
+
+                    # Call LLM for marking and providing feedback
+                    feedback = gpt.mark_lab(solution_path, f'digitized/{file}')
+
+                    # Create feedback file for random id associated to student
+                    with open(f"feedback/{file}", "w") as text_file:
+                        text_file.write(str(feedback))
+
+                    # Retrieve the mark from the feedback and save to dataframe and excel
+                    mark = process.retrieve_mark(feedback)
+                    io_utils.save_mark(mark, df, file.strip('.txt'))
+            break
+        else:
+            print("Invalid option")
 
 if __name__ == "__main__":
     main()
+
+
+# To do:
+# Finalize LLM and VLM models
+# Reconfigure the framework the fit the LLM and VLM models
+# Refine Prompts
+# Test the system
