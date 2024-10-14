@@ -1,5 +1,4 @@
 from ocr_utils import crop_lab, extract_name
-from pdf2imagelist import pdf2imagelist
 import gpt
 import os
 import pandas as pd
@@ -64,7 +63,7 @@ def process_solutions(drive, folder_id):
             
             download_dir = "solutions/"  # Specify the directory to download the file
             download_pdf(file, download_dir)
-            image_list = pdf2imagelist(download_dir, file['title'])
+            image_list = io_utils.pdf2imagelist(download_dir, file['title'])
             process_images_solution(image_list, solution_path)
 
     return solution_path
@@ -82,7 +81,7 @@ def process_student_work(drive, folder_id):
         if file['mimeType'].startswith('application/pdf'):  # Check if the file is a PDF
             download_dir = "pdfs/"  # Specify the directory to download the file
             download_pdf(file, download_dir)
-            image_list = pdf2imagelist(download_dir, file['title'])
+            image_list = io_utils.pdf2imagelist(download_dir, file['title'])
 
             # Extract the student name and ID from the first page with OCR
             # To be replaced by file naming.
