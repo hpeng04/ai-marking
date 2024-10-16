@@ -1,0 +1,7 @@
+PyDrive
+opencv-python
+openai
+pdf2image
+pytesseract
+tesseract
+pandas
