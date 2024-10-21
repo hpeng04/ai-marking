@@ -22,7 +22,7 @@ def list_files_smb(folder_path):
     
     # Create full path for each file and filter out only the files
     full_paths = [os.path.join(folder_path, entry) for entry in all_entries if os.path.isfile(os.path.join(folder_path, entry))]
-    print(full_paths)
+    # print(full_paths)
     return full_paths
 
 # Download the PDF from the Google Drive to a specified directory download_dir
