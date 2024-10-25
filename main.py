@@ -6,6 +6,7 @@ import gpt
 import gemini # TBD
 import process
 import io_utils
+import time
 
 CLEAR = r'clear' if os.name == 'posix' else 'cls'
 
@@ -180,7 +181,9 @@ def main():
         elif option == '':
             continue
         else:
+            os.system(CLEAR)
             print("Invalid option")
+            time.sleep(0.5)
 
 if __name__ == "__main__":
     main()

@@ -5,6 +5,7 @@ import numpy as np
 import re
 import pandas as pd
 import os
+import io_utils
 
 def crop_name(img_path, random_id):
     with Image.open(img_path) as img:
@@ -101,4 +102,4 @@ if __name__ == "__main__":
     img_path = "temp/12_1.png"
     df = pd.DataFrame(columns=['Name', 'ID', 'random_ID'])
     df, random_id = extract_name(img_path, df)
-    save_to_excel(df)
+    io_utils.save_to_excel(df)
