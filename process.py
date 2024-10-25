@@ -85,12 +85,13 @@ def process_solutions_smb(file_list):
             file_name = os.path.basename(file).split('.')[0]
 
             solution_path = f"solutions/{file_name}.txt"
-            
             download_dir = "solutions/"  # Specify the directory to download the file
+            
             shutil.copy(file, download_dir)
+            print(f"Saved {file_name}.pdf")
 
             image_list = io_utils.pdf2imagelist(download_dir, file_name+'.pdf')
-            print(f"Saved {file_name}.pdf")
+            
 
             process_images_solution(image_list, solution_path)
 
