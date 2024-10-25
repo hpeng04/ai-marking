@@ -39,7 +39,7 @@ def mark_lab(solution_path, student_work_path):
         api_key = key_file.read().strip()
 
     with open("prompts/marking_prompt.txt", "r", encoding='utf-8') as prompt_file:
-        prompt = prompt_file.read()
+        rubric = prompt_file.read()
     
     with open(solution_path, "r", encoding='ISO-8859-1') as solution_file:
         solution = solution_file.read()
@@ -50,12 +50,26 @@ def mark_lab(solution_path, student_work_path):
     genai.configure(api_key=api_key)
 
     model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
-    
-    response = model.generate_content(
-        [f"Prompt: {prompt}, Model Answer: {solution}, Student Work: {student_work} return the total score in the last line as a single number"],
-        stream=True
-    )
+
+    # Prepare a task prompt for the model
+    task_prompt = f"""
+    Task: Evaluate the student's answer based on the provided rubric and the standard solution. 
+    For each question, compare the student's answer to the standard solution and assign a mark based on the rubric. 
+    Provide a brief feedback and justification for each question.
+
+    Rubric: {rubric}
+
+    Standard Solution: {solution}
+
+    Student's Answer: {student_work}
+
+    Write the total score as a single integer value at the last line.
+    """
+
+    # Perform the evaluation by passing the task prompt to the model
+    response = model.generate_content([task_prompt], stream=True)
     response.resolve()
+
     return response.text
 
 if __name__ == "__main__":
