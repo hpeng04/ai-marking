@@ -1,12 +1,10 @@
 from ocr_utils import crop_lab, extract_name
-import gpt
 import os
 import pandas as pd
 import io_utils
 import re
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 import shutil
+import mathpix
 
 # List the files contained the Google Drive folder
 def list_files_gdrive(drive, folder_id):
@@ -39,7 +37,7 @@ def process_images(image_list, random_id):
         cropped_img_path = f"temp/{random_id}_{page+1}.png"
         os.remove(image_path)
         image.save(cropped_img_path)
-        response = gpt.digitize_student_work(cropped_img_path)
+        response = mathpix.process(cropped_img_path)
         # Write response to a text file
         with open(f"digitized/{random_id}.txt", "a") as text_file:
             text_file.write(str(response))
@@ -49,7 +47,7 @@ def process_images(image_list, random_id):
 # This is different from process_images as it requires a different prompt
 def process_images_solution(image_list, solution_dir):
     for page, image_path in enumerate(image_list):
-        response = gpt.digitize_solution(image_path)
+        response = mathpix.process(image_path)
 
         # Write response to a text file
         with open(solution_dir, "a") as text_file:
