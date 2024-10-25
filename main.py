@@ -75,7 +75,7 @@ def option1_smb():
         if file.endswith('.txt'):
 
             # Call LLM for marking and providing feedback
-            feedback = gpt.mark_lab(solution_path, f'digitized/{file}')
+            feedback = gemini.mark_lab(solution_path, f'digitized/{file}')
 
             # Create feedback file for random id associated to student
             with open(f"feedback/{file}", "w") as text_file:
